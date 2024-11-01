@@ -29,13 +29,13 @@ class MyCLI(cmd.Cmd):
         with open("tasks.json", "w") as f:
             json.dump(self.tasks, f)
 
-    def do_help(self, line):
+    def do_help(self):
         console = Console()
         console.print(
             "You can perform certaint actions with these commands \n help: Get all the commands \n add_task: Add a task \n show_tasks: show all task saved \n delete {id} delete a task providing the id of it \n update {id} new name: Edit a taks"
         )
 
-    def do_quit(self, line):
+    def do_quit(self):
         return True
 
 

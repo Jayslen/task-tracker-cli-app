@@ -1,6 +1,9 @@
 import cmd
 import json
 import os
+from datetime import datetime
+from rich.console import Console
+from rich.table import Table
 
 
 class MyCLI(cmd.Cmd):
@@ -25,6 +28,15 @@ class MyCLI(cmd.Cmd):
     def postloop(self):
         with open("tasks.json", "w") as f:
             json.dump(self.tasks, f)
+
+    def do_help(self, line):
+        console = Console()
+        console.print(
+            "You can perform certaint actions with these commands \n help: Get all the commands \n add_task: Add a task \n show_tasks: show all task saved \n delete {id} delete a task providing the id of it \n update {id} new name: Edit a taks"
+        )
+
+    def do_quit(self, line):
+        return True
 
 
 if __name__ == "__main__":

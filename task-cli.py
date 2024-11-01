@@ -10,12 +10,22 @@ class MyCLI(cmd.Cmd):
     def __init__(self):
         super().__init__()
         self.tasks = []
+        self.id = 0
 
     prompt = ">>"
     intro = "Welcome to track list CLI app, write help, to get all the commands"
 
     def update_tasks(self, value):
         self.tasks = value
+
+    def create_task(self, name):
+        return {
+            "id": self.id,
+            "task": name,
+            "status": "todo",
+            "created_at": f"{datetime.now()}",
+            "updated_at": f"{datetime.now()}",
+        }
 
     def preloop(self):
         if not os.path.exists("tasks.json"):
@@ -29,14 +39,20 @@ class MyCLI(cmd.Cmd):
         with open("tasks.json", "w") as f:
             json.dump(self.tasks, f)
 
-    def do_help(self):
+    def do_help(self, line):
         console = Console()
         console.print(
             "You can perform certaint actions with these commands \n help: Get all the commands \n add_task: Add a task \n show_tasks: show all task saved \n delete {id} delete a task providing the id of it \n update {id} new name: Edit a taks"
         )
 
-    def do_quit(self):
+    def do_quit(self, line):
         return True
+
+    def do_add_task(self, line):
+        new_task = self.create_task(line)
+        self.tasks.append(new_task)
+        self.id = self.tasks[len(self.tasks) - 1]["id"] + 1
+        print(self.id)
 
 
 if __name__ == "__main__":

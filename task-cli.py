@@ -18,7 +18,10 @@ class MyCLI(cmd.Cmd):
 
     def update_tasks(self, value):
         self.tasks = value
-        self.id = value[-1]["id"] + 1
+        try:
+            self.id = value[-1]["id"] + 1
+        except IndexError:
+            None
 
     def create_task(self, name):
         return {
@@ -34,8 +37,11 @@ class MyCLI(cmd.Cmd):
             with open("tasks.json", "w") as file:
                 file.write("[]")
         else:
-            with open("tasks.json", "r") as f:
-                self.update_tasks(json.load(f))
+            with open("tasks.json", "r+") as f:
+                try:
+                    self.update_tasks(json.load(f))
+                except json.JSONDecodeError:
+                    f.write("[]")
 
     def postloop(self):
         with open("tasks.json", "w") as f:
@@ -56,6 +62,10 @@ class MyCLI(cmd.Cmd):
         self.id = self.tasks[len(self.tasks) - 1]["id"] + 1
 
     def do_show_tasks(self, line):
+        if len(self.tasks) == 0:
+            print("No tasks to show")
+            return None
+
         rows = [list(x.values()) for x in self.tasks]
         columns = list(self.tasks[0].keys())
 

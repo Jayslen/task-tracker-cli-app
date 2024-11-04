@@ -32,6 +32,19 @@ class MyCLI(cmd.Cmd):
             "updated_at": f"{datetime.now()}",
         }
 
+    def search_task(self, list, id, first, last):
+        if first > last:
+            return None
+
+        midpoint = (first + last) // 2
+
+        if list[midpoint]["id"] == id:
+            return midpoint
+        elif list[midpoint]["id"] > id:
+            return self.search_task(list, id, first, midpoint - 1)
+        else:
+            return self.search_task(list, id, midpoint + 1, last)
+
     def preloop(self):
         if not os.path.exists("tasks.json"):
             with open("tasks.json", "w") as file:

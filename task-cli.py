@@ -38,6 +38,9 @@ class MyCLI(cmd.Cmd):
 
         midpoint = (first + last) // 2
 
+        if midpoint >= len(list):
+            return None
+
         if list[midpoint]["id"] == id:
             return midpoint
         elif list[midpoint]["id"] > id:
@@ -95,6 +98,16 @@ class MyCLI(cmd.Cmd):
             table.add_row(*row, style="magenta")
 
         console.print(table)
+
+    def do_delete(self, line):
+        selected_task = self.search_task(
+            first=0, last=len(self.tasks), id=int(line), list=self.tasks
+        )
+        if selected_task is None:
+            print("There is no task with that id, try with other one")
+        else:
+            self.tasks.pop(selected_task)
+            print("Task eliminated")
 
 
 if __name__ == "__main__":

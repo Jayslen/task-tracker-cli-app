@@ -52,6 +52,20 @@ class MyCLI(cmd.Cmd):
         else:
             return self.search_task(list, id, midpoint + 1, last)
 
+    def update_progress(self, id, status):
+        selected_task_index = self.search_task(
+            first=0, last=len(self.tasks), id=id, list=self.tasks
+        )
+        if selected_task_index is None:
+            print("There is no task with that id, try with other one")
+        else:
+            self.tasks[selected_task_index]["status"] = status
+            self.tasks[selected_task_index]["updated_at"] = f"{datetime.now()}"
+            self.update_file()
+            print(
+                f"Task {self.tasks[selected_task_index]['task'].upper()} mark as {status}"
+            )
+
     def preloop(self):
         if not os.path.exists("tasks.json"):
             with open("tasks.json", "w") as file:
@@ -100,20 +114,27 @@ class MyCLI(cmd.Cmd):
             row = list(x)
             row[0] = str(row[0])
             row[1] = row[1].capitalize()
+            row[2] = row[2].capitalize()
             table.add_row(*row, style="magenta")
 
         console.print(table)
 
     def do_delete(self, line):
-        selected_task = self.search_task(
+        selected_task_index = self.search_task(
             first=0, last=len(self.tasks), id=int(line), list=self.tasks
         )
-        if selected_task is None:
+        if selected_task_index is None:
             print("There is no task with that id, try with other one")
         else:
-            print(f"Task {self.tasks[selected_task]['task'].upper()} deleted")
-            self.tasks.pop(selected_task)
+            print(f"Task {self.tasks[selected_task_index]['task'].upper()} deleted")
+            self.tasks.pop(selected_task_index)
             self.update_file()
+
+    def do_mark_in_progress(self, line):
+        self.update_progress(id=int(line), status="in progress")
+
+    def do_mark_done(self, line):
+        self.update_progress(id=int(line), status="done")
 
 
 if __name__ == "__main__":

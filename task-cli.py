@@ -23,6 +23,10 @@ class MyCLI(cmd.Cmd):
         except IndexError:
             None
 
+    def update_file(self):
+        with open("tasks.json", "w") as f:
+            json.dump(self.tasks, f)
+
     def create_task(self, name):
         return {
             "id": self.id,
@@ -60,8 +64,7 @@ class MyCLI(cmd.Cmd):
                     f.write("[]")
 
     def postloop(self):
-        with open("tasks.json", "w") as f:
-            json.dump(self.tasks, f)
+        self.update_file()
 
     def do_help(self, line):
         console = Console()
@@ -76,6 +79,8 @@ class MyCLI(cmd.Cmd):
         new_task = self.create_task(line)
         self.tasks.append(new_task)
         self.id = self.tasks[len(self.tasks) - 1]["id"] + 1
+        self.update_file()
+        print(f"Task {line.upper()} added")
 
     def do_show_tasks(self, line):
         if len(self.tasks) == 0:
@@ -106,8 +111,9 @@ class MyCLI(cmd.Cmd):
         if selected_task is None:
             print("There is no task with that id, try with other one")
         else:
+            print(f"Task {self.tasks[selected_task]['task'].upper()} deleted")
             self.tasks.pop(selected_task)
-            print("Task eliminated")
+            self.update_file()
 
 
 if __name__ == "__main__":

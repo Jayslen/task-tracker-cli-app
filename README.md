@@ -15,6 +15,9 @@ The task tracker CLI app, is a project created with python that allows the user 
   <li>update {id}</li>
 </ul>
 
+### Demo
+![Demo gif](https://github.com/Jayslen/task-tracker-cli-app/blob/main/src/demo.gif)
+
 ### Run locally
 ```
 git clone https://github.com/Jayslen/task-tracker-cli-app.git

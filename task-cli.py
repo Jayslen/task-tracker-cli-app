@@ -1,6 +1,7 @@
 import cmd
 import json
 import os
+import re
 from datetime import datetime
 from rich.console import Console
 from rich.table import Table
@@ -41,7 +42,10 @@ class MyCLI(cmd.Cmd):
             "updated_at": f"{datetime.now()}",
         }
 
-    def search_task(self, list, id, first, last):
+    def search_task(self, list, id: int, first, last):
+        if type(id) is not int:
+            return None
+
         if first > last:
             return None
 
@@ -57,10 +61,16 @@ class MyCLI(cmd.Cmd):
         else:
             return self.search_task(list, id, midpoint + 1, last)
 
-    def update_progress(self, id, status):
-        selected_task_index = self.search_task(
-            first=0, last=len(self.tasks), id=id, list=self.tasks
-        )
+    def update_status(self, id, status):
+        selected_task_index = None
+        try:
+            selected_task_index = self.search_task(
+                first=0, last=len(self.tasks), id=id, list=self.tasks
+            )
+        except ValueError:
+            print("Id not valid, must be a number")
+            return None
+
         if selected_task_index is None:
             print("There is no task with that id, try with other one")
         else:
@@ -134,9 +144,15 @@ class MyCLI(cmd.Cmd):
         console.print(table)
 
     def do_delete(self, line):
-        selected_task_index = self.search_task(
-            first=0, last=len(self.tasks), id=int(line), list=self.tasks
-        )
+        selected_task_index = None
+        try:
+            selected_task_index = self.search_task(
+                first=0, last=len(self.tasks), id=int(line), list=self.tasks
+            )
+        except ValueError:
+            print("Id not valid, must be a number")
+            return None
+
         if selected_task_index is None:
             print("There is no task with that id, try with other one")
         else:
@@ -145,10 +161,10 @@ class MyCLI(cmd.Cmd):
             self.update_file()
 
     def do_mark_in_progress(self, line):
-        self.update_progress(id=int(line), status=task_in_progress)
+        self.update_status(id=line, status=task_in_progress)
 
     def do_mark_done(self, line):
-        self.update_progress(id=int(line), status=task_done)
+        self.update_status(id=line, status=task_done)
 
 
 if __name__ == "__main__":

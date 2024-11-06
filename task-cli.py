@@ -6,6 +6,11 @@ from rich.console import Console
 from rich.table import Table
 from rich import box
 
+task_done = "done"
+task_in_progress = "in progress"
+task_todo = "todo"
+tasks_status = [task_done, task_in_progress, task_todo]
+
 
 class MyCLI(cmd.Cmd):
     def __init__(self):
@@ -31,7 +36,7 @@ class MyCLI(cmd.Cmd):
         return {
             "id": self.id,
             "task": name,
-            "status": "todo",
+            "status": task_todo,
             "created_at": f"{datetime.now()}",
             "updated_at": f"{datetime.now()}",
         }
@@ -97,14 +102,23 @@ class MyCLI(cmd.Cmd):
         print(f"Task {line.upper()} added")
 
     def do_show_tasks(self, line):
+        tasks_to_show = []
+        task_txt = ""
+        if line.strip() not in tasks_status or len(line.strip()) == 0:
+            print("Showing all the tasks")
+            tasks_to_show = self.tasks
+        else:
+            tasks_to_show = [x for x in self.tasks if x["status"] == line]
+            task_txt = line
+
         if len(self.tasks) == 0:
             print("No tasks to show")
             return None
 
-        rows = [list(x.values()) for x in self.tasks]
+        rows = [list(x.values()) for x in tasks_to_show]
         columns = list(self.tasks[0].keys())
 
-        table = Table(title="Tasks", show_lines=True, box=box.DOUBLE_EDGE)
+        table = Table(title=f"Tasks {task_txt}", show_lines=True, box=box.DOUBLE_EDGE)
         console = Console()
 
         for x in columns:
@@ -131,10 +145,10 @@ class MyCLI(cmd.Cmd):
             self.update_file()
 
     def do_mark_in_progress(self, line):
-        self.update_progress(id=int(line), status="in progress")
+        self.update_progress(id=int(line), status=task_in_progress)
 
     def do_mark_done(self, line):
-        self.update_progress(id=int(line), status="done")
+        self.update_progress(id=int(line), status=task_done)
 
 
 if __name__ == "__main__":

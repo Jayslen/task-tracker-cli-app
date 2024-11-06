@@ -62,24 +62,22 @@ class MyCLI(cmd.Cmd):
             return self.search_task(list, id, midpoint + 1, last)
 
     def update_status(self, id, status):
-        selected_task_index = None
         try:
             selected_task_index = self.search_task(
                 first=0, last=len(self.tasks), id=id, list=self.tasks
             )
+            if selected_task_index is None:
+                print("There is no task with that id, try with other one")
+            else:
+                self.tasks[selected_task_index]["status"] = status
+                self.tasks[selected_task_index]["updated_at"] = f"{datetime.now()}"
+                self.update_file()
+                print(
+                    f"Task {self.tasks[selected_task_index]['task'].upper()} mark as {status}"
+                )
         except ValueError:
             print("Id not valid, must be a number")
             return None
-
-        if selected_task_index is None:
-            print("There is no task with that id, try with other one")
-        else:
-            self.tasks[selected_task_index]["status"] = status
-            self.tasks[selected_task_index]["updated_at"] = f"{datetime.now()}"
-            self.update_file()
-            print(
-                f"Task {self.tasks[selected_task_index]['task'].upper()} mark as {status}"
-            )
 
     def preloop(self):
         if not os.path.exists("tasks.json"):
@@ -144,21 +142,19 @@ class MyCLI(cmd.Cmd):
         console.print(table)
 
     def do_delete(self, line):
-        selected_task_index = None
         try:
             selected_task_index = self.search_task(
                 first=0, last=len(self.tasks), id=int(line), list=self.tasks
             )
+            if selected_task_index is None:
+                print("There is no task with that id, try with other one")
+            else:
+                print(f"Task {self.tasks[selected_task_index]['task'].upper()} deleted")
+                self.tasks.pop(selected_task_index)
+                self.update_file()
         except ValueError:
             print("Id not valid, must be a number")
             return None
-
-        if selected_task_index is None:
-            print("There is no task with that id, try with other one")
-        else:
-            print(f"Task {self.tasks[selected_task_index]['task'].upper()} deleted")
-            self.tasks.pop(selected_task_index)
-            self.update_file()
 
     def do_mark_in_progress(self, line):
         self.update_status(id=line, status=task_in_progress)

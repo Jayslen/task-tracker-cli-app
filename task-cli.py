@@ -63,7 +63,7 @@ class MyCLI(cmd.Cmd):
     def update_status(self, id, status):
         try:
             selected_task_index = self.search_task(
-                first=0, last=len(self.tasks), id=id, list=self.tasks
+                first=0, last=len(self.tasks), id=int(id), list=self.tasks
             )
             if selected_task_index is None:
                 print("There is no task with that id, try with other one")
@@ -101,7 +101,7 @@ class MyCLI(cmd.Cmd):
     def do_quit(self, line):
         return True
 
-    def do_add_task(self, line):
+    def do_add(self, line):
         new_task = self.create_task(line)
         self.tasks.append(new_task)
         self.id = self.tasks[len(self.tasks) - 1]["id"] + 1

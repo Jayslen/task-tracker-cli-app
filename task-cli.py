@@ -1,7 +1,6 @@
 import cmd
 import json
 import os
-import re
 from datetime import datetime
 from rich.console import Console
 from rich.table import Table

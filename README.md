@@ -21,4 +21,4 @@ git clone https://github.com/Jayslen/task-tracker-cli-app.git
 python task-cli.py
 ```
 
-This project is from [Roadmap.sh]([https://www.markdownguide.org](https://roadmap.sh/projects/task-tracker)), you can find all the details there, and do it all by your self.
+This project is from [Roadmap.sh](https://roadmap.sh/projects/task-tracker), you can find all the details there, and do it all by your self.

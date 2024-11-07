@@ -95,13 +95,17 @@ class MyCLI(cmd.Cmd):
     def do_help(self, line):
         console = Console()
         console.print(
-            "You can perform certaint actions with these commands \n help: Get all the commands \n add_task: Add a task \n show_tasks: show all task saved \n delete {id} delete a task providing the id of it \n update {id} new name: Edit a taks"
+            "You can perform certaint actions with these commands \n help: Get all the commands \n add: Add a task \n list: show all task saved \n list done: show all done tasks \n list in progress: show all task in progress \n list todo: show task to do \n delete {id} delete a task providing the id of it \n update {id} new name: Edit a taks"
         )
 
     def do_quit(self, line):
         return True
 
     def do_add(self, line):
+        if len(line.strip()) < 4:
+            print("Task name too short try other")
+            return None
+
         new_task = self.create_task(line)
         self.tasks.append(new_task)
         self.id = self.tasks[len(self.tasks) - 1]["id"] + 1

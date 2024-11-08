@@ -21,6 +21,10 @@ class MyCLI(cmd.Cmd):
     prompt = ">>"
     intro = "Welcome to track list CLI app, write help, to get all the commands"
 
+    # FOR TESTING
+    def test_start(self):
+        self.preloop()
+
     def update_tasks(self, value):
         self.tasks = value
         try:

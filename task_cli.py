@@ -18,7 +18,7 @@ class MyCLI(cmd.Cmd):
         self.tasks = []
         self.id = 0
 
-    prompt = "task-cli >"
+    prompt = "task-cli > "
     intro = "Welcome to track list CLI app, write help, to get all the commands"
 
     # FOR TESTING

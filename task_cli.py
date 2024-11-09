@@ -99,7 +99,7 @@ class MyCLI(cmd.Cmd):
     def do_help(self, line):
         console = Console()
         console.print(
-            "You can perform certaint actions with these commands \n help: Get all the commands \n add: Add a task \n list: show all task saved \n list done: show all done tasks \n list in progress: show all task in progress \n list todo: show task to do \n delete {id} delete a task providing the id of it \n update {id} new name: Edit a taks"
+            "You can perform certaint actions with these commands \n help: Get all the commands \n add: Add a task \n list: show all task saved \n list done: show all done tasks \n list in progress: show all task in progress \n list todo: show task to do \n mark_done {id}: mark the task selected as done \n mark_in_progress {id}:mark the task selected as in progress \n delete {id} delete a task providing the id of it \n update {id} new name: Edit a taks"
         )
 
     def do_quit(self, line):

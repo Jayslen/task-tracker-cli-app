@@ -103,6 +103,7 @@ class MyCLI(cmd.Cmd):
         )
 
     def do_quit(self, line):
+        print("Bye, the task tracker was closed")
         return True
 
     def do_add(self, line):
